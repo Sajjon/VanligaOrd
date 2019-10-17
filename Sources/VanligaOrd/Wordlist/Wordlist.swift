@@ -12,13 +12,21 @@ public struct Wordlist {
     
     public let words: [String]
     public let nameOfLanguage: String
+    
+    internal init(words: [String], nameOfLanguage: String) {
+        
+        assert(words.count == Self.count)
+        
+        self.words = words
+        self.nameOfLanguage = nameOfLanguage
+    }
 
-    public init(words uncheckedUnsortedWords: [String], nameOfLanguage: String) throws {
+    public init(unchecked uncheckedUnsortedWords: [String], nameOfLanguage: String) throws {
         guard uncheckedUnsortedWords.count == Self.count else {
             throw Error.invalidLengthOfWordlist(expectedWordCount: Self.count, butGot: uncheckedUnsortedWords.count)
         }
         
-        let uncheckedWordsAscending = uncheckedUnsortedWords.sorted(by: <)
+        let uncheckedWordsAscending = uncheckedUnsortedWords.sorted(by: { $0.lexicographicallyPrecedes($1) })
         
         var checkedWords = [String]()
         var lastWord: String?
@@ -30,8 +38,7 @@ public struct Wordlist {
         
         assert(checkedWords.count == Self.count)
         
-        self.words = checkedWords
-        self.nameOfLanguage = nameOfLanguage
+        self.init(words: checkedWords, nameOfLanguage: nameOfLanguage)
     }
 }
 

@@ -28,8 +28,20 @@ final class VanligaOrdTests: XCTestCase {
         XCTAssertEqual(Language.english.last, "zoo")
     }
     
+    func testFrench() {
+        XCTAssertEqual(French.words.count, 2048)
+        XCTAssertEqual(Language.french.wordlist.words.count, 2048)
+        XCTAssertEqual(Language.french.nameOfLanguage, "French")
+        
+        XCTAssertEqual(Language.french.first, "abaisser")
+        XCTAssertEqual(Language.french[1], "abandon")
+        XCTAssertEqual(Language.french[2046], "zeste")
+        XCTAssertEqual(Language.french.last, "zoologie")
+    }
+    
     static var allTests = [
         ("testIdentifyingUnambiguousWords", testIdentifyingUnambiguousWords),
         ("testEnglish", testEnglish),
+        ("testFrench", testFrench),
     ]
 }

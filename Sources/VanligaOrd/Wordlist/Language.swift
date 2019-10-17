@@ -17,10 +17,16 @@ public struct Language: WordlistForLanguage {
     
 }
 
-public extension Language {
-    static var english: Language {
-        .init(wordlist: try! Wordlist(words: English.words, nameOfLanguage: "English"))
+private extension Language {
+    init(words: [String], _ function: String = #function) {
+        let wordlist =  Wordlist(words: words, nameOfLanguage: function.capitalized)
+        self.init(wordlist: wordlist)
     }
+}
+
+public extension Language {
+    static var english: Language { .init(words: English.words) }
+    static var french: Language { .init(words: French.words) }
 }
 
 // MARK: - CaseIterable
