@@ -140,10 +140,10 @@ final class VanligaOrdTests: XCTestCase {
     
     func testGenerateWordsInEnglish() {
         func doTest(wordCount: Int, in language: Language = .english) {
-            let generator = Generator(purpose: .password(.numberOfWords(wordCount, inLanguage: language)))
-            let result = try! generator.generate()
-            XCTAssertEqual(result.words.count, wordCount)
-            for word in result.words {
+            let passwordGenerator = Generator.ofPassword(in: language, numberOfWords: wordCount)
+            let password = passwordGenerator.generate()
+            XCTAssertEqual(password.words.count, wordCount)
+            for word in password.words {
                 XCTAssertTrue(language.words.contains(word))
             }
         }
@@ -154,20 +154,24 @@ final class VanligaOrdTests: XCTestCase {
     }
     
     func testNumberOfBitsMapsToCorrectNumberOfWords() {
-        func doTest(bitsOfEntropy: Int, expectedWordCount: Int, in language: Language = .english) {
-            let generator = Generator(purpose: .password(.strength(bitsOfEntropy: bitsOfEntropy, inLanguage: language)))
-            let result = try! generator.generate()
-            XCTAssertEqual(result.words.count, expectedWordCount)
+        func doTest(bitsOfEntropy: UInt16, expectedWordCount: Int, in language: Language = .english) {
+            let passwordGenerator = Generator(recipe: try! Recipe(purpose: .password, bitsOfEntropy: bitsOfEntropy, in: language))
+            
+            let password = passwordGenerator.generate()
+            
+            XCTAssertEqual(password.words.count, expectedWordCount)
         }
         
         doTest(bitsOfEntropy: 0, expectedWordCount: 0)
-        for bitsOfEntropy in 1...Wordlist.bitsOfEntropyPerWords {
+        for bitsOfEntropyAsInt in 1...Wordlist.bitsOfEntropyPerWords {
+            let bitsOfEntropy = UInt16(bitsOfEntropyAsInt)
             doTest(bitsOfEntropy: bitsOfEntropy, expectedWordCount: 1)
         }
         doTest(bitsOfEntropy: 12, expectedWordCount: 2)
         doTest(bitsOfEntropy: 21, expectedWordCount: 2)
         doTest(bitsOfEntropy: 22, expectedWordCount: 2)
         doTest(bitsOfEntropy: 23, expectedWordCount: 3)
+        doTest(bitsOfEntropy: 128, expectedWordCount: 12)
         doTest(bitsOfEntropy: 256, expectedWordCount: 24)
     }
     
@@ -183,7 +187,6 @@ final class VanligaOrdTests: XCTestCase {
             }
         }
         XCTAssertEqual(zeroThrough2047.count, 2048)
-        print("Randomly generated all 2048 possible integers after #\(counter) attempts.")
     }
 
     static var allTests = [
@@ -206,6 +209,7 @@ final class VanligaOrdTests: XCTestCase {
 private extension VanligaOrdTests {
     func basicSanityTestOf(language: Language, assertMaxLengthOfWords: Bool = true, assertMinLengthOfWords: Bool = true) {
         
+        XCTAssertTrue(language.isOnBip39ListOfLanguages)
         XCTAssertEqual(language.count, 2048)
         
         for (index, word) in language.enumerated() {

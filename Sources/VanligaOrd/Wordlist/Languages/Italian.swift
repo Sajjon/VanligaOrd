@@ -8,7 +8,7 @@
 import Foundation
 
 internal enum Italian {
-    static let words: [String] = [
+    static let words: OrderedSet<String> = [
         "abaco",
         "abbaglio",
         "abbinato",

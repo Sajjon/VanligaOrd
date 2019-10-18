@@ -8,7 +8,7 @@
 import Foundation
 
 internal enum ChineseSimplified {
-    static let words: [String] = [
+    static let words: OrderedSet<String> = [
         "的",
         "一",
         "是",

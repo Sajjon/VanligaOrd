@@ -7,7 +7,7 @@
 
 import Foundation
 
-internal let numberOfBitsPerByte = 8
+internal let numberOfBitsPerByte: UInt = 8
 
 extension Data {
     var binaryString: String {

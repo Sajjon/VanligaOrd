@@ -10,84 +10,16 @@ import Foundation
 // MARK: - Wordlist
 public struct Wordlist {
     
-    public let words: [String]
+    public let words: OrderedSet<String>
     public let nameOfLanguage: String
     
-    internal init(words: [String], nameOfLanguage: String) {
+    internal init(words: OrderedSet<String>, nameOfLanguage: String) {
         
         assert(words.count == Self.count)
         
         self.words = words
         self.nameOfLanguage = nameOfLanguage
     }
-
-    public init(unchecked uncheckedUnsortedWords: [String], nameOfLanguage: String) throws {
-        guard uncheckedUnsortedWords.count == Self.count else {
-            throw Error.invalidLengthOfWordlist(expectedWordCount: Self.count, butGot: uncheckedUnsortedWords.count)
-        }
-        
-        let uncheckedWordsAscending = uncheckedUnsortedWords.sorted(by: { $0.lexicographicallyPrecedes($1) })
-        
-        var checkedWords = [String]()
-        var lastWord: String?
-        for uncheckedWord in uncheckedWordsAscending {
-            let checkedWord = try Self.check(word: uncheckedWord, earlierWord: lastWord)
-            checkedWords.append(checkedWord)
-            lastWord = checkedWord
-        }
-        
-        assert(checkedWords.count == Self.count)
-        
-        self.init(words: checkedWords, nameOfLanguage: nameOfLanguage)
-    }
-}
-
-// MARK: - Validate
-internal extension Wordlist {
-    
-    static func unambiguousWords(word alphabeticallyEarlierWord: String, succeededBy succeedingWord: String) -> Bool {
-        
-        guard
-            alphabeticallyEarlierWord.lexicographicallyPrecedes(succeedingWord)
-        else {
-            print("Words need to be in ascending order, but '\(alphabeticallyEarlierWord)' doe NOT lexicographically precede '\(succeedingWord)'.")
-            return false
-        }
-        
-        func relevantSubstring(of fullString: String) -> String {
-            String(fullString.prefix(Self.requiredUniqueCharactersForDisambiguation))
-        }
-            
-        let needle = relevantSubstring(of: succeedingWord)
-        let haystack = relevantSubstring(of: alphabeticallyEarlierWord)
-
-        return !haystack.starts(with: needle)
-    }
-        
-    static func check(word: String, earlierWord: String? = nil) throws -> String {
-        guard
-            word.count >= Self.minimumCharacterCountPerWord,
-            word.count <= Self.maximumCharacterCountPerWord
-            else {
-                throw Error.invalidLengthOfWord(
-                    minimumCharacterCount: Self.minimumCharacterCountPerWord,
-                    maximumCharacterCount: Self.maximumCharacterCountPerWord,
-                    butWord: word,
-                    hasInvalidLength: word.count
-                )
-        }
-        
-        guard let earlierWord = earlierWord else {
-            return word
-        }
-        
-        guard unambiguousWords(word: earlierWord, succeededBy: word) else {
-            throw Error.ambiguousWord(word, sharedFirstFourCharactersWith: earlierWord)
-        }
-        
-        return word
-    }
-    
 }
 
 // MARK: - Constants

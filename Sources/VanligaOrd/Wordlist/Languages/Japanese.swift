@@ -8,7 +8,7 @@
 import Foundation
 
 internal enum Japanese {
-    static let words: [String] = [
+    static let words: OrderedSet<String> = [
         "あいこくしん",
         "あいさつ",
         "あいだ",
