@@ -1,19 +1,26 @@
 # Be Safe 🛡
+<p align="left">
+<a href="https://swift.org/package-manager/"><img src="https://img.shields.io/badge/SPM-supported-blue.svg?style=flat"></a>
+<a href="https://https://github.com/Sajjon/VanligaOrd/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
+</p>
+
 ### Generate passwords that are
 #### 🔐💪 Cryptographically secure 
 #### 🧠💡 Easy to remember 
 
 A minimal [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) compatible library for generation of common words as password or BIP39 mnemonic.
 
-![Password strength](https://imgs.xkcd.com/comics/password_strength.png)
-
-[source: xkcd](https://xkcd.com/936)
+<p align="center">
+<a href="https://xkcd.com/936"><img src="https://imgs.xkcd.com/comics/password_strength.png" alt="Xkcd 936" title="Password security" width="600"/>
+</p>
 
 ## Recommended Strength
 
-On [user `HelmedHorror`'s amazing table about password strength on Reddit](https://www.reddit.com/r/dataisbeautiful/comments/322lbk/time_required_to_bruteforce_crack_a_password/).
+Reddit user `HelmedHorror` has created this amazing table about password strength.
 
-![Entropy](http://i.imgur.com/gfYw57t.png)
+<p align="center">
+<a href="https://www.reddit.com/r/dataisbeautiful/comments/322lbk/time_required_to_bruteforce_crack_a_password"><img src="http://i.imgur.com/gfYw57t.png" alt="Reddit" title="Entropy" width="1400"/>
+</p>
 
 [In 2012 a cluster of 25 GPUs achived a hashrate of 10^12](https://arstechnica.com/%20information-technology/2012/12/25-gpu-cluster-cracks-every-standard-windows-password-in-6-hours/). Due to exponential growth in computer power ([Moore’s law](https://en.wikipedia.org/wiki/Moore%27s_law)), we are over 10^13 in 2019 (time of writing). To generate a safe password it is thus recommended you achive 80 bits of entropy.
 
@@ -23,6 +30,31 @@ On [user `HelmedHorror`'s amazing table about password strength on Reddit](https
 |---------------------------------------|------|-----|-----|------|-----|-----|-----|------|------|-------|---------|---------|----------|----------|
 | Time until cracked                    | 13 h | 2 d | 8 d | 34 d | 4 m | 1 y | 6 y | 24 y | 96 y | 383 y | 1,500 y | 6,100 y | 25,000 y | 98,000 y |
 | #Words needed (wordlist of size 2048) | 6    | 6   | 6   | 6    | 7   | 7   | 7   | 7    | 7    | 8     | 8       | 8       | 8        | 8        |
+
+## Installation
+
+Installable via [Swift Package Manager (SPM)](https://swift.org/package-manager/):
+
+### Xcode 11
+From Xcode 11, you can use SPM to add `VanligaOrd` to your project:
+
+1.  Select File > Swift Packages > Add Package Dependency, Enter
+`https://github.com/Sajjon/VanligaOrd.git` in the *"Choose Package Repository"* dialog.
+2.  In the next page, specify the version resolving rule as "Up to Next Major" with "0.0.1" as its earliest version.
+3.  After Xcode checking out the source and resolving the version, you can choose the "VanligaOrd" library and add it to your app target.
+
+If you encounter any problem or have a question on adding package to an Xcode project, take a look at the [Adding Package Dependencies to Your App](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app) guide article from Apple.
+
+**- or -**
+
+### Package.swift file
+Add in your `Package.swift` file
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/Sajjon/VanligaOrd", from: "0.0.1"),
+],
+```
 
 ## Usage
 
