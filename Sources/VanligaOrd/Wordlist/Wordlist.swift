@@ -93,6 +93,7 @@ internal extension Wordlist {
 // MARK: - Constants
 public extension Wordlist {
     static let count: Int = 2048
+    static let bitsOfEntropyPerWords: Int = 11 // 2^11 = 2048
     
     /// According to BIP30 'smart selection of words', each word in the list
     /// needs to be unambiguously identified, using only the first four letters

@@ -12,14 +12,14 @@ final class VanligaOrdTests: XCTestCase {
         // MARK: True
         XCTAssertTrue(Wordlist.unambiguousWords(word: "a", succeededBy: "b"))
         XCTAssertTrue(Wordlist.unambiguousWords(word: "aaab", succeededBy: "aaac"))
-
+        
         XCTAssertTrue(Wordlist.unambiguousWords(word: "cat", succeededBy: "catalog"))
         XCTAssertTrue(Wordlist.unambiguousWords(word: "cat", succeededBy: "catch"))
         XCTAssertTrue(Wordlist.unambiguousWords(word: "cat", succeededBy: "category"))
         XCTAssertTrue(Wordlist.unambiguousWords(word: "cat", succeededBy: "cattle"))
-
+        
         // MARK: False
-
+        
         XCTAssertFalse(Wordlist.unambiguousWords(word: "aaaab", succeededBy: "aaaac"))
         XCTAssertFalse(Wordlist.unambiguousWords(word: "abcde", succeededBy: "abcdf"))
     }
@@ -137,6 +137,54 @@ final class VanligaOrdTests: XCTestCase {
         XCTAssertEqual(language[2046], "zumo")
         XCTAssertEqual(language.last, "zurdo")
     }
+    
+    func testGenerateWordsInEnglish() {
+        func doTest(wordCount: Int, in language: Language = .english) {
+            let generator = Generator(purpose: .password(.numberOfWords(wordCount, inLanguage: language)))
+            let result = try! generator.generate()
+            XCTAssertEqual(result.words.count, wordCount)
+            for word in result.words {
+                XCTAssertTrue(language.words.contains(word))
+            }
+        }
+        
+        for wordCount in 0..<20 {
+            doTest(wordCount: wordCount)
+        }
+    }
+    
+    func testNumberOfBitsMapsToCorrectNumberOfWords() {
+        func doTest(bitsOfEntropy: Int, expectedWordCount: Int, in language: Language = .english) {
+            let generator = Generator(purpose: .password(.strength(bitsOfEntropy: bitsOfEntropy, inLanguage: language)))
+            let result = try! generator.generate()
+            XCTAssertEqual(result.words.count, expectedWordCount)
+        }
+        
+        doTest(bitsOfEntropy: 0, expectedWordCount: 0)
+        for bitsOfEntropy in 1...Wordlist.bitsOfEntropyPerWords {
+            doTest(bitsOfEntropy: bitsOfEntropy, expectedWordCount: 1)
+        }
+        doTest(bitsOfEntropy: 12, expectedWordCount: 2)
+        doTest(bitsOfEntropy: 21, expectedWordCount: 2)
+        doTest(bitsOfEntropy: 22, expectedWordCount: 2)
+        doTest(bitsOfEntropy: 23, expectedWordCount: 3)
+        doTest(bitsOfEntropy: 256, expectedWordCount: 24)
+    }
+    
+    func testRandomlyGenerateUInt11() {
+        var zeroThrough2047 = Set<UInt11>()
+        var counter = 0
+        for attempts in 0..<2048*100 {
+            defer { counter += 1 }
+            let random = UInt11(bitArray: try! securelyGenerateBits(count: 11))!
+            zeroThrough2047.insert(random)
+            if zeroThrough2047.count == 2048 {
+                break
+            }
+        }
+        XCTAssertEqual(zeroThrough2047.count, 2048)
+        print("Randomly generated all 2048 possible integers after #\(counter) attempts.")
+    }
 
     static var allTests = [
         ("testIdentifyingUnambiguousWords", testIdentifyingUnambiguousWords),
@@ -149,6 +197,9 @@ final class VanligaOrdTests: XCTestCase {
         ("testJapanese", testJapanese),
         ("testKorean", testKorean),
         ("testSpanish", testSpanish),
+        ("testGenerateWordsInEnglish", testGenerateWordsInEnglish),
+        ("testNumberOfBitsMapsToCorrectNumberOfWords", testNumberOfBitsMapsToCorrectNumberOfWords),
+        ("testRandomlyGenerateUInt11", testRandomlyGenerateUInt11),
     ]
 }
 
@@ -176,6 +227,6 @@ private extension VanligaOrdTests {
             }
             
         }
-
+        
     }
 }
