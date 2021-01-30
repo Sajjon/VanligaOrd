@@ -14,6 +14,12 @@ A minimal [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki
 <a href="https://xkcd.com/936"><img src="https://imgs.xkcd.com/comics/password_strength.png" alt="Xkcd 936" title="Password security" width="600"/>
 </p>
 
+# Generate Now
+
+```zsh
+git clone --depth 1 git@github.com:Sajjon/VanligaOrd.git && cd VanligaOrd && sh generate.sh
+```
+
 ## Recommended Strength
 
 Reddit user `HelmedHorror` has created this amazing table about password strength.
@@ -31,13 +37,21 @@ Reddit user `HelmedHorror` has created this amazing table about password strengt
 | Time until cracked                    | 13 h | 2 d | 8 d | 34 d | 4 m | 1 y | 6 y | 24 y | 96 y | 383 y | 1,500 y | 6,100 y | 25,000 y | 98,000 y |
 | #Words needed (wordlist of size 2048) | 6    | 6   | 6   | 6    | 7   | 7   | 7   | 7    | 7    | 8     | 8       | 8       | 8        | 8        |
 
+
 ## Run in terminal (CLI support)
+
 
 ```zsh
 swift run GeneratePassword | less
 ```
 
 The piping to `less` is of course optional - but recommended for maximum security (it automatically clears the password from your screen after you press `Q` to exit `less`).
+
+Or use the shell script:
+
+```zsh
+sh generate.sh
+```
 
 ## Installation
 
