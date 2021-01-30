@@ -42,7 +42,7 @@ Reddit user `HelmedHorror` has created this amazing table about password strengt
 
 
 ```zsh
-swift run GeneratePassword | less
+swift run GeneratePassword --words 8 | less
 ```
 
 The piping to `less` is of course optional - but recommended for maximum security (it automatically clears the password from your screen after you press `Q` to exit `less`).

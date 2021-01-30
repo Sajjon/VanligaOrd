@@ -95,20 +95,19 @@ public extension SecurelyGeneratedWords {
 private extension SecurelyGeneratedWords {
     static func timeUntilCracked(entropy: UInt16, attackerStrength: AttackerStrength) -> String {
         let untilCrackedSeconds = secondsUntilCracked(entropy: entropy, attackerStrength: attackerStrength)
-        
         let dateComponentsFormatter = DateComponentsFormatter()
         dateComponentsFormatter.maximumUnitCount = 1
         dateComponentsFormatter.unitsStyle = .full
-        guard let dateComponentsString = dateComponentsFormatter.string(from: TimeInterval(untilCrackedSeconds)) else {
+        guard let dateComponentsString = dateComponentsFormatter.string(from: untilCrackedSeconds) else {
             return "unknown"
         }
         
         return dateComponentsString
     }
     
-    static func secondsUntilCracked(entropy: UInt16, attackerStrength: AttackerStrength) -> UInt {
+    static func secondsUntilCracked(entropy: UInt16, attackerStrength: AttackerStrength) -> TimeInterval {
         let guessesPerSeconds = attackerStrength.rawValue
         let seconds = pow(2, Double(entropy)) / guessesPerSeconds
-        return UInt(seconds)
+        return TimeInterval(seconds)
     }
 }
