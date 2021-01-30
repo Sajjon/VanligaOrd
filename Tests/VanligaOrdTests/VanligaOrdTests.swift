@@ -202,7 +202,7 @@ final class VanligaOrdTests: XCTestCase {
     func testRandomlyGenerateUInt11() {
         var zeroThrough2047 = Set<UInt11>()
         var counter = 0
-        for attempts in 0..<2048*100 {
+        for _ in 0..<2048*100 {
             defer { counter += 1 }
             let random = UInt11(bitArray: try! securelyGenerateBits(count: 11))!
             zeroThrough2047.insert(random)
